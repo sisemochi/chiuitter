@@ -6,7 +6,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import ro.upt.ac.chiuitter.data.ChiuitRepository
 import ro.upt.ac.chiuitter.domain.Chiuit
-import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class FirebaseChiuitStore : ChiuitRepository {
 
@@ -37,7 +39,7 @@ class FirebaseChiuitStore : ChiuitRepository {
     override suspend fun addChiuit(chiuit: Chiuit): Unit = suspendCoroutine { continuation ->
         TODO ("Insert the object into database - don't forget to use the right model")
 
-        TODO ("Make sure continuation is called")
+        TODO ("Make sure the continuation is called")
     }
 
     override suspend fun removeChiuit(chiuit: Chiuit) : Unit = suspendCoroutine { continuation ->
@@ -58,7 +60,7 @@ class FirebaseChiuitStore : ChiuitRepository {
 
                 database.removeEventListener(this)
 
-                TODO ("Make sure continuation is called")
+                TODO ("Make sure the continuation is called")
             }
 
         })
