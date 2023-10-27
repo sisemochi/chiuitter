@@ -143,11 +143,8 @@ class HomeActivity : AppCompatActivity() {
         data?.let {
             // TODO 5: Extract the text from result intent.
 
-
-            // TODO 6: Check if text is not null or empty, then set the new "chiuitText".
-
-
             // TODO 9': Instantiate a new chiuit object then delegate the addition to the [viewModel].
+
         }
     }
 
