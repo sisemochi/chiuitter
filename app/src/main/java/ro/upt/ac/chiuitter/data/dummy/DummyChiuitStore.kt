@@ -1,12 +1,13 @@
 package ro.upt.ac.chiuitter.data.dummy
 
+import kotlinx.coroutines.flow.callbackFlow
 import ro.upt.ac.chiuitter.domain.Chiuit
 import ro.upt.ac.chiuitter.domain.ChiuitRepository
 
 class DummyChiuitStore : ChiuitRepository {
 
-    override fun getAll(): List<Chiuit> =
-        listOf(
+    override fun getAll() = callbackFlow {
+        trySend(listOf(
             Chiuit(
                 0, "Ada-mi Doamne, timpu-odata\n" +
                         "Sa-mi vad tara mea bogata,\n" +
@@ -50,6 +51,8 @@ class DummyChiuitStore : ChiuitRepository {
                         "de strigat m-am săturat"
             )
         )
+        )
+    }
 
     override fun addChiuit(chiuit: Chiuit) = Unit
 

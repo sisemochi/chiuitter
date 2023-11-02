@@ -1,68 +1,66 @@
 package ro.upt.ac.chiuitter.data.firebase
 
+import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import ro.upt.ac.chiuitter.data.ChiuitRepository
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import ro.upt.ac.chiuitter.domain.Chiuit
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import ro.upt.ac.chiuitter.domain.ChiuitRepository
 
 class FirebaseChiuitStore : ChiuitRepository {
 
     private val database = FirebaseDatabase.getInstance().reference.child("chiuits")
 
-    override suspend fun getAll(): List<Chiuit> = suspendCoroutine { continuation ->
-        database.addListenerForSingleValueEvent(object : ValueEventListener {
+    override fun getAll(): Flow<List<Chiuit>> = callbackFlow {
+        val listener = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                database.removeEventListener(this)
-                continuation.resumeWithException(p0.toException())
+                Log.e("FirebaseChiuitStore", "getAll:", p0.toException())
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                val values = mutableListOf<ChiuitNode>()
+                val nodeValues = mutableListOf<ChiuitNode>()
 
                 val children = p0.children
+                // TODO 15: Iterate through the children, get the node value and
+                //  add it to nodeValues.
 
-                TODO ("Iterate through the children and get the node value")
+                val items = nodeValues.map { chiuitNode -> chiuitNode.toDomainModel() }
 
-                database.removeEventListener(this)
-
-                continuation.resume(values.map { chiuitNode -> chiuitNode.toDomainModel() })
+                trySend(items)
             }
 
-        })
+        }
+        database.addListenerForSingleValueEvent(listener)
+
+        awaitClose { database.removeEventListener(listener) }
     }
 
-    override suspend fun addChiuit(chiuit: Chiuit): Unit = suspendCoroutine { continuation ->
-        TODO ("Insert the object into database - don't forget to use the right model")
-
-        TODO ("Make sure the continuation is called")
+    override fun addChiuit(chiuit: Chiuit) {
+        // TODO 16: Insert the object into database - don't forget to use the right model.
     }
 
-    override suspend fun removeChiuit(chiuit: Chiuit) : Unit = suspendCoroutine { continuation ->
+    override fun removeChiuit(chiuit: Chiuit) {
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 database.removeEventListener(this)
-                continuation.resumeWithException(p0.toException())
+                Log.e("FirebaseChiuitStore", "removeChiuit:", p0.toException())
             }
 
             override fun onDataChange(p0: DataSnapshot) {
                 val children = p0.children
 
-
-                TODO ("Iterate through the children and find the matching node, then perform removal.")
+                // TODO 17: Iterate through the children and find the matching node,
+                //  then perform the removal.
                 for (child in children) {
 
                 }
 
                 database.removeEventListener(this)
-
-                TODO ("Make sure the continuation is called")
             }
-
         })
     }
 

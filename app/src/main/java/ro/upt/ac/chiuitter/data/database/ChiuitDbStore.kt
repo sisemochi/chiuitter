@@ -1,12 +1,14 @@
 package ro.upt.ac.chiuitter.data.database
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ro.upt.ac.chiuitter.domain.Chiuit
 import ro.upt.ac.chiuitter.domain.ChiuitRepository
 
 class ChiuitDbStore(private val appDatabase: AppDatabase) : ChiuitRepository {
 
-    override fun getAll(): List<Chiuit> {
-        return appDatabase.chiuitDao().getAll().map { it.toDomainModel() }
+    override fun getAll(): Flow<List<Chiuit>> {
+        return appDatabase.chiuitDao().getAll().map { list -> list.map { it.toDomainModel() } }
     }
 
     override fun addChiuit(chiuit: Chiuit) {

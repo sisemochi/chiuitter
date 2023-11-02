@@ -27,8 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ro.upt.ac.chiuitter.R
-import ro.upt.ac.chiuitter.data.database.ChiuitDbStore
-import ro.upt.ac.chiuitter.data.database.RoomDatabase
+import ro.upt.ac.chiuitter.data.firebase.FirebaseChiuitStore
 import ro.upt.ac.chiuitter.domain.Chiuit
 
 class HomeActivity : AppCompatActivity() {
@@ -37,17 +36,18 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = HomeViewModel(ChiuitDbStore(RoomDatabase.getDb(this)))
+        viewModel = HomeViewModel(FirebaseChiuitStore())
         setContent { HomeScreen(viewModel) }
     }
 
     @Composable
     private fun HomeScreen(viewModel: HomeViewModel) {
-        val chiuitListState = viewModel.chiuitListState.collectAsState()
+        val chiuitListState = viewModel.chiuitListState.collectAsState(emptyList())
 
         Surface(color = Color.White) {
             Box(modifier = Modifier.fillMaxSize()) {
                 // TODO 7: Use a vertical list that composes and displays only the visible items.
+
 
                 // TODO 8: Make use of Compose DSL to describe the content of the list and make sure
                 // to instantiate a [ChiuitListItem] for every item in [chiuitListState.value].
@@ -143,7 +143,7 @@ class HomeActivity : AppCompatActivity() {
         data?.let {
             // TODO 5: Extract the text from result intent.
 
-            // TODO 9': Instantiate a new chiuit object then delegate the addition to the [viewModel].
+            // TODO 9': Delegate the addition to the [viewModel] by passing the text.
 
         }
     }

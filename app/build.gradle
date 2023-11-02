@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     namespace 'ro.upt.ac.chiuitter'
@@ -40,6 +40,7 @@ android {
 
 dependencies {
     def room_version = "2.6.0"
+    def firebase_bom = "32.5.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -54,8 +55,9 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.8.0'
 
     implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom")
     implementation 'com.google.firebase:firebase-database-ktx'
 }
