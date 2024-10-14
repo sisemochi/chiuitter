@@ -1,6 +1,5 @@
 package ro.upt.ac.chiuitter
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -26,10 +25,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ShareCompat
 
 class HomeActivity : AppCompatActivity() {
 
     private val chiuitListState = mutableStateOf(DummyChiuitStore.getAllData())
+
+    /**
+     * Take a moment to observe how an activity registers for an activity result using the
+     * ActivityResultContract API.
+     */
+    private val getChiuitLauncher = registerForActivityResult(GetChiuitResultContract()) { result ->
+        setChiuitText(result)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,61 +104,38 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    Defines text sharing/sending *implicit* intent, opens the application chooser menu,
-    and starts a new activity which supports sharing/sending text.
+    /**
+     * Defines text sharing/sending *implicit* intent, opens the application chooser menu,
+     * and starts a new activity which supports sharing/sending text.
      */
-    private fun shareChiuit(text: String) {
-        val sendIntent = Intent().apply {
-            // TODO 1: Configure to support text sending/sharing and then attach the text as intent's extra.
+    private fun shareChiuit(chiuitText: String) {
+        val shareIntent = ShareCompat.IntentBuilder(this)
+        // TODO 1: Configure shareIntent to support text sending and set the text extra to chiuitText.
 
-
-        }
-
-        val intentChooser = Intent.createChooser(sendIntent, "")
-
-        startActivity(intentChooser)
+        shareIntent.startChooser()
     }
 
-    /*
-    Defines an *explicit* intent which will be used to start ComposeActivity.
+    /**
+     * Launches the composing activity using the previously defined activity launcher.
      */
     private fun composeChiuit() {
-        // TODO 2: Create an explicit intent which points to ComposeActivity.
-
-
-        // TODO 3: Start a new activity with the previously defined intent.
-        // We start a new activity that we expect to return the acquired text as the result.
+        // TODO 3: Start the ComposeActivity using getChiuitLauncher.
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            COMPOSE_REQUEST_CODE -> if (resultCode == RESULT_OK) extractText(data)
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
+    /**
+     * Checks and ads the new text value into the list.
+     */
+    private fun setChiuitText(resultText: String?) {
+        // TODO 9: Check if text is not null or empty, instantiate a new chiuit object
+        //  then add it to the [chiuitListState.value].
 
-    private fun extractText(data: Intent?) {
-        data?.let {
-            // TODO 5: Extract the text from result intent.
-
-
-            // TODO 6: Check if text is not null or empty, then set the new "chiuitText".
-
-
-            // TODO 9: Instantiate a new chiuit object then add it to [chiuitListState.value].
-        }
     }
 
     @Preview(showBackground = true)
     @Composable
     private fun DefaultPreview() {
         HomeScreen()
-    }
-
-    companion object {
-        const val COMPOSE_REQUEST_CODE = 1213
     }
 
 }
