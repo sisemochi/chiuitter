@@ -71,7 +71,7 @@ class ComposeActivity : AppCompatActivity() {
     private fun onEditClick(text: String) {
         // Prepare the intent to be returned as result.
         val returnIntent = Intent().apply {
-            putExtra(EXTRA_TEXT, text)
+            putExtra(GetChiuitResultContract.EXTRA_TEXT, text)
         }
 
         // Mark the result as success and attach text data.
@@ -85,10 +85,6 @@ class ComposeActivity : AppCompatActivity() {
     @Composable
     private fun DefaultPreview() {
         ComposeScreen()
-    }
-
-    companion object {
-        const val EXTRA_TEXT = "extra_text"
     }
 
 }
