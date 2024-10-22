@@ -99,7 +99,8 @@ class HomeActivity : AppCompatActivity() {
     private fun shareChiuit(chiuitText: String) {
         val shareIntent = ShareCompat.IntentBuilder(this)
         // TODO 1: Configure shareIntent to support text sending and set the text extra to chiuitText.
-
+            .setType("text/plain")
+            .setText(chiuitText)
         shareIntent.startChooser()
     }
 
@@ -111,7 +112,7 @@ class HomeActivity : AppCompatActivity() {
      */
     private fun composeChiuit() {
         // TODO 3: Start the ComposeActivity using getChiuitLauncher.
-
+        getChiuitLauncher.launch(Unit)
     }
 
     /**
@@ -119,7 +120,9 @@ class HomeActivity : AppCompatActivity() {
      */
     private fun setChiuitText(resultText: String?) {
         // TODO 6: Check if text is not null or empty, then set the new "chiuitText".
-
+        if(!resultText.isNullOrEmpty()){
+            chiuitText.value = resultText
+        }
     }
 
     @Preview(showBackground = true)
