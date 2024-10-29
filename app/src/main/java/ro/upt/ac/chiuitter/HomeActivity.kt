@@ -1,5 +1,6 @@
 package ro.upt.ac.chiuitter
 
+import androidx.compose.foundation.lazy.items
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Send
@@ -53,6 +55,11 @@ class HomeActivity : AppCompatActivity() {
                 // TODO 8: Make use of Compose DSL to describe the content of the list and make sure
                 // to instantiate a [ChiuitListItem] for every item in [chiuitListState.value].
 
+                LazyColumn {
+                    items(chiuitListState.value) {chiui ->
+                        ChiuitListItem(chiui)
+                    }
+                }
 
                 AddFloatingButton(
                     modifier = Modifier
@@ -129,6 +136,11 @@ class HomeActivity : AppCompatActivity() {
     private fun setChiuitText(resultText: String?) {
         // TODO 9: Check if text is not null or empty, instantiate a new chiuit object
         //  then add it to the [chiuitListState.value].
+        if(!resultText.isNullOrEmpty()){
+            val newChiuit = Chiuit(description = resultText)
+            chiuitListState.value = chiuitListState.value + newChiuit
+        }
+
 
     }
 
