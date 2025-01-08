@@ -27,6 +27,11 @@ class FirebaseChiuitStore : ChiuitRepository {
                 val children = p0.children
                 // TODO 15: Iterate through the children, get the node value and
                 //  add it to nodeValues.
+                for (child in children) {
+                    child.getValue(ChiuitNode::class.java)?.let { node ->
+                        nodeValues.add(node)
+                    }
+                }
 
                 val items = nodeValues.map { chiuitNode -> chiuitNode.toDomainModel() }
 
@@ -41,6 +46,8 @@ class FirebaseChiuitStore : ChiuitRepository {
 
     override fun addChiuit(chiuit: Chiuit) {
         // TODO 16: Insert the object into database - don't forget to use the right model.
+        val chiuitNode = chiuit.toFirebaseModel()
+        database.push().setValue(chiuitNode)
     }
 
     override fun removeChiuit(chiuit: Chiuit) {
@@ -56,6 +63,11 @@ class FirebaseChiuitStore : ChiuitRepository {
                 // TODO 17: Iterate through the children and find the matching node,
                 //  then perform the removal.
                 for (child in children) {
+                    val chiuitNode = child.getValue(ChiuitNode::class.java)
+                    if (chiuitNode != null && chiuitNode.timestamp == chiuit.timestamp) {
+                        child.ref.removeValue()
+                        break
+                    }
 
                 }
 
